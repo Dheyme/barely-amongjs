@@ -1,0 +1,2 @@
+export const PLAYER_SPRITE_WIDTH = 84;
+export const PLAYER_SPRITE_HEIGHT = 128;
