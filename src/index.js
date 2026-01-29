@@ -2,9 +2,15 @@ import Phaser from 'phaser';
 import logoImg from './assets/logo.png';
 import shipImg from './assets/ship.png'
 import playerSprite from './assets/player.png';
-import { PLAYER_SPRITE_HEIGHT, PLAYER_SPRITE_WIDTH } from './constants';
+import { 
+   PLAYER_SPRITE_HEIGHT, 
+   PLAYER_SPRITE_WIDTH,
+   PLAYER_START_X,
+   PLAYER_START_Y,
+   PLAYER_SPEED,
+} from './constants';
 
-
+const player = {}
 
 /*
 Criação da  cena (classe MyGame)
@@ -43,7 +49,18 @@ class MyGame extends Phaser.Scene
     create ()
     {
         /*Adiciona a imagem na posição x = 400, y = 150. */
-        const logo = this.add.image(400, 150, 'logo');
+        /*const logo = this.add.image(400, 150, 'logo');*/
+        const ship = this.add.image(0,0, 'ship');
+        player.sprite = this.add.sprite(PLAYER_START_X, PLAYER_START_Y, 'player');
+
+        this.input.keyboard.on("keydown", (e) => {
+           if(e.code == "ArrowRight"){
+                player.sprite.x = player.sprite.x + PLAYER_SPEED;
+           }
+        })
+        this.input.keyboard.on("keyup", (e) => {
+            console.log("keyup", e.code)
+        })
       
         /*
         Tween __ animação do objeto 
@@ -58,14 +75,18 @@ class MyGame extends Phaser.Scene
         
         */
 
-        this.tweens.add({
+        /*this.tweens.add({
             targets: logo,
             y: 450,
             duration: 2000,
             ease: "Power2",
             yoyo: true,
             loop: -1
-        });
+        });*/
+    }
+
+    update(){
+        this.scene.scene.cameras.main.centerOn(player.sprite.x, player.sprite.y);
     }
 }
 
@@ -79,7 +100,7 @@ const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
     width: 800,
-    height: 600,
+    height: 450,
     scene: MyGame
 };
 
