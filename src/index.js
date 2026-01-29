@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import logoImg from './assets/logo.png';
-import shipImg from './assets/ship.png'
+import shipImg from './assets/ship.png';
 import playerSprite from './assets/player.png';
 import { 
    PLAYER_SPRITE_HEIGHT, 
@@ -9,8 +9,13 @@ import {
    PLAYER_START_Y,
    PLAYER_SPEED,
 } from './constants';
+import { movePlayers } from './movement'
 
-const player = {}
+
+const player = {};
+let pressedkeys = [];
+
+
 
 /*
 Criação da  cena (classe MyGame)
@@ -54,13 +59,13 @@ class MyGame extends Phaser.Scene
         player.sprite = this.add.sprite(PLAYER_START_X, PLAYER_START_Y, 'player');
 
         this.input.keyboard.on("keydown", (e) => {
-           if(e.code == "ArrowRight"){
-                player.sprite.x = player.sprite.x + PLAYER_SPEED;
+           if(!pressedkeys.includes(e.code)){
+              pressedkeys.push(e.code);
            }
-        })
+        });
         this.input.keyboard.on("keyup", (e) => {
-            console.log("keyup", e.code)
-        })
+            pressedkeys = pressedkeys.filter((key) => key != e.code);
+        });
       
         /*
         Tween __ animação do objeto 
@@ -87,6 +92,7 @@ class MyGame extends Phaser.Scene
 
     update(){
         this.scene.scene.cameras.main.centerOn(player.sprite.x, player.sprite.y);
+        movePlayers(pressedkeys, player.sprite)
     }
 }
 
